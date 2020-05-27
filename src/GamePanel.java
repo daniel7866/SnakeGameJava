@@ -1,11 +1,9 @@
-import jdk.net.SocketFlow;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
-import java.security.Key;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
 
 public class GamePanel extends JPanel implements ActionListener{
     private static final int SPEED = 10;
@@ -42,7 +40,7 @@ public class GamePanel extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(menuPanel.isVisible()){
+        if (menuPanel.isVisible()) {//game is paused
             snake.speed = 0;
         }
         else
@@ -63,7 +61,7 @@ public class GamePanel extends JPanel implements ActionListener{
         else
             changeWallpaper(Color.white);
 
-        snake.cut(snake.selfIntersects());
+        snake.cut(snake.selfIntersects());//if the snake bites itself, it will shrink
         repaint();
     }
 

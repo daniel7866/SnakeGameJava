@@ -2,7 +2,6 @@ import Shapes.MyRectangle;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Snake {
     public static final int UP = 1,DOWN = 2, LEFT = 3, RIGHT = 4;
@@ -28,7 +27,6 @@ public class Snake {
         for (int i = 2; i < body.size();i++) {
             int headX = body.get(0).getX();
             int headY = body.get(0).getY();
-
             int iX = body.get(i).getX();
             int iY = body.get(i).getY();
             if(headX == iX && headY == iY)
@@ -37,7 +35,7 @@ public class Snake {
         return -1;
     }
 
-    public void cut(int i){
+    public void cut(int i) {//when the snake eats itself, it will shrink from where it bit itself
         if(i<0)
             return;
         for (int j = body.size()-1; j >= i; j--) {
