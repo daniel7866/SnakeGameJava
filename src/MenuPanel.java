@@ -24,6 +24,8 @@ public class MenuPanel extends JPanel implements ActionListener {
         }
         else if(e.getSource() == btnHighScores){
             //show highScores
+            Score highscore = (Score) GamePanel.ReadObjectFromFile("highscore");
+            JOptionPane.showConfirmDialog(null, "" + highscore.playerName + ": " + highscore.score, "Highscore", JOptionPane.CLOSED_OPTION);
         }
     }
 }

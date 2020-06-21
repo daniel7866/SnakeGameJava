@@ -1,9 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 
 public class GamePanel extends JPanel implements ActionListener{
     private static final int SPEED = 10;
@@ -18,7 +16,6 @@ public class GamePanel extends JPanel implements ActionListener{
     public static int DELAY = 50;
 
     public GamePanel(int width, int height) {
-
         this.setLayout(new BorderLayout());
         this.addMouseListener(new ML());
         this.addKeyListener(new KL());
@@ -69,19 +66,31 @@ public class GamePanel extends JPanel implements ActionListener{
         this.setBackground(color);
     }
 
+    public static Object ReadObjectFromFile(String filepath) {
+
+        try {
+
+            FileInputStream fileIn = new FileInputStream(filepath);
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+
+            Object obj = objectIn.readObject();
+
+            System.out.println("The Object has been read from the file");
+            objectIn.close();
+            return obj;
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
     private void gameOver(){
         try {
-            BufferedReader bufferreader = new BufferedReader(new FileReader("highscore.txt"));
-            int score = 0;
-            String line;
-            while((line = bufferreader.readLine()) != null){
-                score = Integer.parseInt(line);
-            }
-            if(scorePanel.getScore() > score) {
-                FileWriter fw = new FileWriter("highscore.txt");
-                fw.append(scorePanel.getScore() + "");
-                fw.close();
-            }
+            String fpath = "highscore";
+            Score highscore = (Score) ReadObjectFromFile(fpath);
+            if (highscore.score < scorePanel.score.score)
+                saveScore(new File(fpath));
         }catch (Exception e){
             JOptionPane.showMessageDialog(null,"Could not find score file, scores will not be saved.");
         }
@@ -89,6 +98,14 @@ public class GamePanel extends JPanel implements ActionListener{
         menuPanel.setVisible(true);
         snake = new Snake(width,height);
         scorePanel.setScore(0);
+    }
+
+    private void saveScore(File f) throws IOException {
+        ObjectOutputStream out = new ObjectOutputStream
+                (new FileOutputStream(f));
+        scorePanel.score.setPlayerName(JOptionPane.showInputDialog(null, "What is your name?"));
+        out.writeObject(scorePanel.score);
+        out.close();
     }
 
     @Override
